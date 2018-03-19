@@ -1,5 +1,6 @@
 # Battleship-Backend
 
+
 Clone the repo
 Add remote: git remote add origin git@github.com:Bianca91/Battleship-Backend.git
 
