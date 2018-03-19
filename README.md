@@ -1,22 +1,12 @@
-# Tic Tac Toe Server
+# Battleship-Backend
 
-This is a server for playing a multiplayer Tic Tac Toe game. 
+Clone the repo
+Add remote: git remote add origin git@github.com:Bianca91/Battleship-Backend.git
 
-It has these endpoints:
+Pull the master branch git pull origin master
 
-* `POST /users`: sign up as new user
-* `POST /logins`: log in and receive a JWT
-* `POST /games`: create a new game
-* `POST /games/:id/players`: join an existing game
-* `PATCH /games/:id`: update an existing game
-* `GET /games`: list all games
-* `GET /users`: list all users
+Then install dependencies yarn install
 
-## Running
+When you start working checkout on a branch git checkout -b branch-name
 
-* You need a working Postgres database that is preferrably empty (drop all the tables) and running 
-* Install the dependencies using `yarn install`
-* Compile the app (Typescript > Javascript) using `yarn compile` (during development you can use `yarn watch`)
-* `yarn start`
-
-You can run the tests with `yarn test`. Currently they only cover the game logic. 
+When you push always push to the branch you're working on: git push origin branch-name
