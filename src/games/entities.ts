@@ -1,55 +1,166 @@
-import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
-import User from '../users/entity'
+import {
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  ManyToOne
+} from "typeorm";
 
-export type Symbol = 'x' | 'o'
-export type Row = [ Symbol | null, Symbol | null, Symbol | null ]
-export type Board = [ Row, Row, Row ]
+import User from "../users/entity";
 
-type Status = 'pending' | 'started' | 'finished'
+export type Symbol = 1 | 2 | 3 | 4 | 5 | null | "miss" | "hit";
 
-const emptyRow: Row = [null, null, null]
-const emptyBoard: Board = [ emptyRow, emptyRow, emptyRow ]
+export type BoardShips = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
 
+export type BoardGuess = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+type Status = "pending" | "started" | "finished";
+
+
+const emptyboard1: BoardShips = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+const emptyboard2: BoardGuess = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+export type ShipShape = {
+  1: {
+    name: "carrier";
+    length: 5;
+  };
+
+  2: {
+    name: "BattleShip";
+    length: 4;
+  };
+
+  3: {
+    name: "Submarine";
+    length: 3;
+  };
+
+  4: {
+    name: "Cruiser";
+    length: 3;
+  };
+
+  5: {
+    name: "Destroyer";
+    length: 2;
+  };
+};
+
+const shipShape: ShipShape = {
+  1: {
+    name: "carrier",
+    length: 5
+  },
+
+  2: {
+    name: "BattleShip",
+    length: 4
+  },
+
+  3: {
+    name: "Submarine",
+    length: 3
+  },
+
+  4: {
+    name: "Cruiser",
+    length: 3
+  },
+
+  5: {
+    name: "Destroyer",
+    length: 2
+  }
+};
 @Entity()
 export class Game extends BaseEntity {
+  @PrimaryGeneratedColumn() id?: number;
 
-  @PrimaryGeneratedColumn()
-  id?: number
+  @Column("json", { default: emptyboard1 })
+  board1: BoardShips;
 
-  @Column('json', {default: emptyBoard})
-  board: Board
+  @Column("json", { default: emptyboard2 })
+  board2: BoardGuess;
 
-  @Column('char', {length:1, default: 'x'})
-  turn: Symbol
+  @Column("json")
+  shipShape: ShipShape;
 
-  @Column('char', {length:1, nullable: true})
-  winner: Symbol
+  @Column("char", { length: 1, default: null })
+  turn: Symbol;
 
-  @Column('text', {default: 'pending'})
-  status: Status
+  @Column("char", { length: 1, nullable: true })
+  winner: Symbol;
+
+  @Column("text", { default: "pending" })
+  status: Status;
 
   // this is a relation, read more about them here:
   // http://typeorm.io/#/many-to-one-one-to-many-relations
-  @OneToMany(_ => Player, player => player.game, {eager:true})
-  players: Player[]
+  @OneToMany(_ => Player, player => player.game, { eager: true })
+  players: Player[];
 }
+//table for ships? or include with player table?
+//one player has many ships/// but ships linked to one player
 
 @Entity()
-@Index(['game', 'user', 'symbol'], {unique:true})
+@Index(["game", "user", "symbol"], { unique: true })
 export class Player extends BaseEntity {
-
-  @PrimaryGeneratedColumn()
-  id?: number
+  @PrimaryGeneratedColumn() id?: number;
 
   @ManyToOne(_ => User, user => user.players)
-  user: User
+  user: User;
 
   @ManyToOne(_ => Game, game => game.players)
-  game: Game
+  game: Game;
 
-  @Column()
-  userId: number
-
-  @Column('char', {length: 1})
-  symbol: Symbol
+  @Column("char", { length: 1 })
+  symbol: Symbol;
 }
