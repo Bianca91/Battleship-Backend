@@ -10,8 +10,21 @@ import {
 
 import User from "../users/entity";
 
-export type Symbol = 1 | 2 | 3 | 4 | 5 | null | "miss" | "hit";
-
+export type Symbol = 1 | 2 | 3 | 4 | 5 | "miss" | "hit" | null;
+export type Row = [ Symbol |
+  Symbol | null,
+  Symbol | null,
+  Symbol | null,
+  Symbol | null,
+  Symbol | null,
+  Symbol | null,
+  Symbol | null,
+  Symbol | null,
+  Symbol | null,
+  Symbol | null,
+  Symbol |
+  null
+];
 export type BoardShips = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -39,7 +52,6 @@ export type BoardGuess = [
 ];
 
 type Status = "pending" | "started" | "finished";
-
 
 const emptyboard1: BoardShips = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -130,8 +142,7 @@ export class Game extends BaseEntity {
   @Column("json", { default: emptyboard2 })
   board2: BoardGuess;
 
-  @Column("json")
-  shipShape: ShipShape;
+  @Column("json") shipShape: ShipShape;
 
   @Column("char", { length: 1, default: null })
   turn: Symbol;
