@@ -1,16 +1,24 @@
 // import 'mocha'
 // import { equal } from 'assert'
 // import { calculateWinner, isValidTransition, finished } from './logic'
-// import { Board } from './entities'
+// import { BoardShips, BoardGuess } from './entities'
 //
 // describe('calculateWinner()', () => {
 //
-//   it('should work for a horizontal winner', () => {
-//     const board: Board = [
-//       ['x', 'x', 'o'],
-//       ['x', 'x', 'x'],
-//       [null, 'o', 'o'],
-//     ]
+//   it('should work for a ', () => {
+//     const BoardShips: BoardShips = [
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+//     ];
+//
 //     equal(calculateWinner(board), 'x')
 //   })
 //
