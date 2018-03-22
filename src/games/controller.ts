@@ -16,8 +16,8 @@ import User from "../users/entity";
 import { Game, Player, BoardShips, BoardGuess } from "./entities";
 import {
   IsBoardShips,
-  IsBoardGuess
-  // isValidTransition,
+  IsBoardGuess,
+  isValidTransition
   // calculateWinner,
   // finished
 } from "./logic";
@@ -51,8 +51,8 @@ export default class GameController {
     }).save();
 
     const game = await Game.findOneById(entity.id);
-//ADD_GAME is a action...
-//this is linked to the createGame class in actions
+    //ADD_GAME is a action...
+    //this is linked to the createGame class in actions
     io.emit("action", {
       type: "ADD_GAME",
       payload: game
@@ -61,7 +61,7 @@ export default class GameController {
     return game;
   }
 
-//This update is linked to UPDATE_GAME action in class
+  //This update is linked to UPDATE_GAME action in class
   @Authorized()
   @Post("/games/:id([0-9]+)/players")
   @HttpCode(201)
@@ -109,41 +109,40 @@ export default class GameController {
       throw new BadRequestError(`The game is not started yet`);
     if (player.symbol !== game.turn)
       throw new BadRequestError(`It's not your turn`);
-    // if (!isValidTransition(player.symbol, game.board1, update.boardships)) {
-    //   throw new BadRequestError(`Invalid move`);
-   //}
+    if (!isValidTransition(player.symbol, game.board1, update.boardships)) {
+      throw new BadRequestError(`Invalid move`);
+    }
 
-//Call function from the logic where we calculate the winner
-  //
-  //   const winner = calculateWinner(update.board);
-  //   if (winner) {
-  //     game.winner = winner;
-  //     game.status = "finished";
-  //   } else if (finished(update.board)) {
-  //     game.status = "finished";
-  //   } else {
-  //     game.turn = player.symbol === "x" ? "o" : "x";
-  //   }
-  //   game.board = update.board;
-  //   await game.save();
-  //
-  //   io.emit("action", {
-  //     type: "UPDATE_GAME",
-  //     payload: game
-  //   });
-  //
-  //   return game;
+    //
+    //   //Call function from the logic where we calculate the winner
+    //     const winner = calculateWinner(update.board);
+    //     if (winner) {
+    //       game.winner = winner;
+    //       game.status = "finished";
+    //     } else if (finished(update.board)) {
+    //       game.status = "finished";
+    //     } else {
+    //       game.turn = player.symbol === "x" ? "o" : "x";
+    //     }
+    //     game.board = update.board;
+    //     await game.save();
+    //
+    //     io.emit("action", {
+    //       type: "UPDATE_GAME",
+    //       payload: game
+    //     });
+    //
+    //     return game;
   }
 
   @Authorized()
   @Get("/games/:id([0-9]+)")
-  getGame(@Param("id") id: number) {
+  getUser(@Param("id") id: number) {
     return Game.findOneById(id);
   }
-
   @Authorized()
   @Get("/games")
-  getGames() {
+  async getGames() {
     return Game.find();
   }
 }
