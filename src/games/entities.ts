@@ -142,12 +142,13 @@ export class Game extends BaseEntity {
   @Column("json", { default: emptyboard2 })
   board2: BoardGuess;
 
-  @Column("json") shipShape: ShipShape;
+  @Column("json", { nullable: true})
+  shipShape: ShipShape
 
-  @Column("char", { length: 1, default: null })
+  @Column("text", { default: null })
   turn: Symbol;
 
-  @Column("char", { length: 1, nullable: true })
+  @Column("text", {  nullable: true })
   winner: Symbol;
 
   @Column("text", { default: "pending" })
@@ -172,6 +173,9 @@ export class Player extends BaseEntity {
   @ManyToOne(_ => Game, game => game.players)
   game: Game;
 
-  @Column("char", { length: 1 })
+  @Column("char", { length: 1, nullable: true })
   symbol: Symbol;
+
+  @Column()
+  userId: number
 }
