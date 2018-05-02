@@ -51,7 +51,7 @@ useKoaServer(app, {
     }
     return undefined
   }
-})
+ })
 
 io.use(socketIoJwtAuth.authenticate({ secret }, async (payload, done) => {
   const user = await User.findOneById(payload.id)
